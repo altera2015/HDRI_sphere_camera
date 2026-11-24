@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -146,6 +147,8 @@ private fun CameraPreview(vm: CaptureViewModel) {
 private fun TopBar(ui: CaptureUiState, vm: CaptureViewModel, onOpenSessions: () -> Unit) {
     val locked = ui.done.isNotEmpty()
     var confirmLens by remember { mutableStateOf<org.hdricapture.camera.LensOption?>(null) }
+    var showAbout by remember { mutableStateOf(false) }
+    if (showAbout) org.hdricapture.ui.AboutDialog { showAbout = false }
     confirmLens?.let { l ->
         AlertDialog(
             onDismissRequest = { confirmLens = null },
@@ -155,8 +158,9 @@ private fun TopBar(ui: CaptureUiState, vm: CaptureViewModel, onOpenSessions: () 
             dismissButton = { TextButton(onClick = { confirmLens = null }) { Text("Cancel") } },
         )
     }
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
     Row(
-        Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 4.dp),
+        Modifier.weight(1f).horizontalScroll(rememberScrollState()).padding(start = 8.dp, top = 4.dp, bottom = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -173,6 +177,8 @@ private fun TopBar(ui: CaptureUiState, vm: CaptureViewModel, onOpenSessions: () 
             onClick = { vm.setRigMode(if (ui.rigMode == RigMode.TRIPOD) RigMode.HANDHELD else RigMode.TRIPOD) },
             label = { Text("Tripod", style = MaterialTheme.typography.labelSmall) },
         )
+    }
+    IconButton(onClick = { showAbout = true }) { Icon(Icons.Outlined.Info, "About", tint = Color.White) }
     }
 }
 

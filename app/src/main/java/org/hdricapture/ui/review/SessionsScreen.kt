@@ -29,6 +29,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -82,6 +89,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.hdricapture.export.RawSetExporter
+import org.hdricapture.ui.AboutDialog
 import org.hdricapture.processing.StitchWorker
 import org.hdricapture.session.Session
 import org.hdricapture.session.SessionStore
@@ -99,12 +107,15 @@ fun SessionsScreen(onBack: () -> Unit, onView: (hdrPath: String) -> Unit) {
     var sessions by remember { mutableStateOf(store.list()) }
     var busy by remember { mutableStateOf<String?>(null) }
     val notifPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
+    var showAbout by remember { mutableStateOf(false) }
+    if (showAbout) AboutDialog { showAbout = false }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Sessions") },
                 navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") } },
+                actions = { IconButton(onClick = { showAbout = true }) { Icon(Icons.Outlined.Info, "About") } },
             )
         },
     ) { padding ->

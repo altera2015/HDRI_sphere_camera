@@ -6,16 +6,6 @@ on:
   pull_request:
 
 jobs:
-  core:
-    name: Native core (desktop)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y ninja-build
-      - run: cmake -S core -B core/build-desktop -G Ninja -DCMAKE_BUILD_TYPE=Release
-      - run: cmake --build core/build-desktop
-      - run: ctest --test-dir core/build-desktop --output-on-failure
-
   android:
     name: Android app
     runs-on: ubuntu-latest

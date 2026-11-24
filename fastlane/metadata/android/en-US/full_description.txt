@@ -1,0 +1,22 @@
+<p>HDRI Sphere turns your phone into an HDRI camera. It captures a full 360°×180° high dynamic range environment map that you can use for image-based lighting and skies in <a href="https://godotengine.org">Godot</a>, <a href="https://www.blender.org">Blender</a> and other render engines.</p>
+
+<p><b>How it works</b></p>
+<ul>
+<li>Aim spots are drawn over the camera view. Point at each one and hold still; the app captures automatically.</li>
+<li>At every spot it takes a bracket of RAW exposures. If highlights are still clipped (sun, lamps) it keeps adding shorter exposures.</li>
+<li>Everything is merged and stitched on the phone into an equirectangular panorama.</li>
+</ul>
+
+<p><b>Features</b></p>
+<ul>
+<li>Output as OpenEXR (half float) and Radiance HDR, at 2K, 4K or 8K</li>
+<li>Tone-mapped 360° JPEG that Google Photos and other viewers show as a photo sphere</li>
+<li>Built-in 360° viewer: move the phone to look around, with an exposure slider</li>
+<li>Dynamic range shown for every capture</li>
+<li>Lens choice, defaulting to the ultra-wide when available (fewer shots)</li>
+<li>Handheld and tripod modes</li>
+<li>Raw-set export: all DNG frames, poses and a Hugin project for desktop stitching</li>
+<li>No network access, no ads, no tracking</li>
+</ul>
+
+<p>Requires a camera with RAW and manual exposure support (Camera2 RAW + MANUAL_SENSOR), which most recent phones have.</p>

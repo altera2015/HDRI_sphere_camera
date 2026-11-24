@@ -10,12 +10,13 @@ android {
     ndkVersion = "29.0.14206865"
 
     defaultConfig {
-        applicationId = "org.hdricapture"
+        applicationId = "io.github.altera2015.hdrisphere"
         minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
-        ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
+        // Phones are arm64; x86_64 (emulators) is added for debug builds only, as OpenCV alone is ~60 MB there.
+        ndk { abiFilters += listOf("arm64-v8a") }
         externalNativeBuild {
             cmake {
                 arguments += listOf("-DANDROID_STL=c++_shared")
@@ -24,8 +25,26 @@ android {
         }
     }
 
+    // Release signing for GitHub builds: provided by CI through environment variables. Without them
+    // (local builds, F-Droid, which signs with its own key) the release APK is left unsigned.
+    val keystore = System.getenv("RELEASE_KEYSTORE")?.let { file(it) }?.takeIf { it.exists() }
+    signingConfigs {
+        if (keystore != null) {
+            create("release") {
+                storeFile = keystore
+                storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
+        debug {
+            ndk { abiFilters += listOf("x86_64") }
+        }
         release {
+            if (keystore != null) signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }

@@ -1,0 +1,1 @@
+Capture 360° HDR environment maps (.exr/.hdr) for Godot, Blender and more
