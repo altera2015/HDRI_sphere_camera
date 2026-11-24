@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  core:
+    name: Native core (desktop)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ninja-build
+      - run: cmake -S core -B core/build-desktop -G Ninja -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build core/build-desktop
+      - run: ctest --test-dir core/build-desktop --output-on-failure
+
+  android:
+    name: Android app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager "ndk;29.0.14206865" "platforms;android-37.0"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew --console=plain :app:testDebugUnitTest :app:assembleDebug
